@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Frontend.CurrencyService.CurrencyRead>
+
+@{
+    ViewBag.Title = "Currencies";
+}
+
+<h2>Lista Walut</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nazwa</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in Model.OrderBy(v => v.Id))
+        {
+            <tr>
+                <td>@v.Id</td>
+                <td>@v.Name</td>
+                <td>
+                    <button class="btn btn-sm btn-primary edit-btn" data-id="@v.Id" data-bs-toggle="modal" data-bs-target="#editModal">Edytuj</button>
+                    <a href="@Url.Action("DeleteCurrency", "Currencies", new {id = v.Id})" class="btn btn-sm btn-danger" onclick="return confirm('Czy jesteś pewny, że chcesz usunąć walute o ID=@v.Id?');">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <button class="btn btn-sm btn-success" id="addVehicleBtn" data-bs-toggle="modal" data-bs-target="#addModal">Dodaj</button>
+</div>
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).on('click', '.edit-btn', function () {
+            var id = $(this).data('id');
+            $.get('/Currencies/EditCurrencyForm/' + id, function (html) {
+                $('#editModal .modal-content').html(html);
+            });
+        });
+
+        $('#addVehicleBtn').on('click', function () {
+            $.get('/Currencies/AddCurrencyForm', function (html) {
+                $('#addModal .modal-content').html(html);
+            });
+        });
+
+        $(document).on('submit', 'form', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                method: form.attr('method'),
+                data: form.serialize(),
+                success: function (response) {
+                    if ($(response).find("form").length > 0) {
+                        form.closest('.modal-content').html(response);
+                    } else {
+                        location.reload();
+                    }
+                }
+            });
+        });
+    </script>
+}

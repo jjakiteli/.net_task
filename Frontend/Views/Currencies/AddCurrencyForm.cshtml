@@ -1,0 +1,16 @@
+﻿@model Frontend.CurrencyService.CurrencyCreate
+
+<form action="Currencies/AddCurrency" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title">Dodaj Walute</h5>
+    </div>
+    <div class="modal-body">
+        <div class="mb-3">
+            <label class="form-label">Nazwa</label>
+            <input name="Name" value="@Model.Name" class="form-control" required />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Zastosuj</button>
+    </div>
+</form>

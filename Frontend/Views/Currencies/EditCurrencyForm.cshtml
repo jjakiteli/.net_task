@@ -1,0 +1,18 @@
+﻿@model Frontend.CurrencyService.CurrencyUpdate
+
+<form action="Currencies/EditCurrency" method="post">
+    <input name="Id" value="@Model.Id" type="hidden" />
+    <div class="modal-header">
+        <h5 class="modal-title">Edytuj Walute</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+        <div class="mb-3">
+            <label class="form-label">Nazwa</label>
+            <input name="Name" value="@Model.Name" class="form-control" required />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Zastosuj</button>
+    </div>
+</form>

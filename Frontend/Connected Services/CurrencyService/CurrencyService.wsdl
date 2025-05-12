@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="CurrencyService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:63738/CurrencyService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:63738/CurrencyService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:63738/CurrencyService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Models" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ICurrencyService_GetCurrencies_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrencies" />
+  </wsdl:message>
+  <wsdl:message name="ICurrencyService_GetCurrencies_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrenciesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICurrencyService_GetCurrency_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrency" />
+  </wsdl:message>
+  <wsdl:message name="ICurrencyService_GetCurrency_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCurrencyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICurrencyService_AddCurrency_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddCurrency" />
+  </wsdl:message>
+  <wsdl:message name="ICurrencyService_AddCurrency_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddCurrencyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICurrencyService_UpdateCurrency_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateCurrency" />
+  </wsdl:message>
+  <wsdl:message name="ICurrencyService_UpdateCurrency_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateCurrencyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICurrencyService_DeleteCurrency_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteCurrency" />
+  </wsdl:message>
+  <wsdl:message name="ICurrencyService_DeleteCurrency_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteCurrencyResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ICurrencyService">
+    <wsdl:operation name="GetCurrencies">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICurrencyService/GetCurrencies" message="tns:ICurrencyService_GetCurrencies_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICurrencyService/GetCurrenciesResponse" message="tns:ICurrencyService_GetCurrencies_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrency">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICurrencyService/GetCurrency" message="tns:ICurrencyService_GetCurrency_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICurrencyService/GetCurrencyResponse" message="tns:ICurrencyService_GetCurrency_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddCurrency">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICurrencyService/AddCurrency" message="tns:ICurrencyService_AddCurrency_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICurrencyService/AddCurrencyResponse" message="tns:ICurrencyService_AddCurrency_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCurrency">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICurrencyService/UpdateCurrency" message="tns:ICurrencyService_UpdateCurrency_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICurrencyService/UpdateCurrencyResponse" message="tns:ICurrencyService_UpdateCurrency_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCurrency">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICurrencyService/DeleteCurrency" message="tns:ICurrencyService_DeleteCurrency_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICurrencyService/DeleteCurrencyResponse" message="tns:ICurrencyService_DeleteCurrency_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ICurrencyService" type="tns:ICurrencyService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCurrencies">
+      <soap:operation soapAction="http://tempuri.org/ICurrencyService/GetCurrencies" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCurrency">
+      <soap:operation soapAction="http://tempuri.org/ICurrencyService/GetCurrency" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddCurrency">
+      <soap:operation soapAction="http://tempuri.org/ICurrencyService/AddCurrency" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateCurrency">
+      <soap:operation soapAction="http://tempuri.org/ICurrencyService/UpdateCurrency" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteCurrency">
+      <soap:operation soapAction="http://tempuri.org/ICurrencyService/DeleteCurrency" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CurrencyService">
+    <wsdl:port name="BasicHttpBinding_ICurrencyService" binding="tns:BasicHttpBinding_ICurrencyService">
+      <soap:address location="http://localhost:63738/CurrencyService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
