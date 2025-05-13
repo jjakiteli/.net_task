@@ -1,0 +1,20 @@
+﻿@model Frontend.CurrencyService.CurrencyRead
+
+<form action="Currencies/DeleteCurrency" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title">Usuń Walute</h5>
+    </div>
+    <div class="modal-body">
+        <div class="mb-3">
+            <label class="form-label">Id</label>
+            <input name="Id" value="@Model.Id" class="form-control" readonly />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nazwa</label>
+            <input name="Name" value="@Model.Name" class="form-control" readonly />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger">Usuń</button>
+    </div>
+</form>

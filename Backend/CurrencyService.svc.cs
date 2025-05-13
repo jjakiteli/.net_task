@@ -91,7 +91,6 @@ namespace Backend
                 var currency = FindCurrency(context, id);
 
                 context.Currencies.Remove(currency);
-
                 context.SaveChanges();
             }
         }

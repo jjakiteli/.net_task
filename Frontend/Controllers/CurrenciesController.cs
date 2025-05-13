@@ -1,5 +1,6 @@
 ﻿using Frontend.CurrencyService;
 using System;
+using System.IO;
 using System.Web.Mvc;
 
 namespace Frontend.Controllers
@@ -15,9 +16,9 @@ namespace Frontend.Controllers
             {
                 currencies = _client.GetCurrencies();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return Content("Connection to backend lost.");
+                return RedirectToAction("ConnectionLost", "Index");
             }
             return View(currencies);
         }
@@ -29,21 +30,33 @@ namespace Frontend.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCurrency(CurrencyCreate currency)
+        public JsonResult AddCurrency(CurrencyCreate currency)
         {
             if (!ModelState.IsValid)
-                return PartialView("AddCurrency", currency);
+            {
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("AddCurrency", currency),
+                    message = "Wystąpił błąd walidacji danych. Proszę poprawić formularz."
+                });
+            }
 
             try
             {
                 _client.AddCurrency(currency);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return PartialView("AddCurrency", currency);
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("AddCurrency", currency),
+                    message = "Wystąpił błąd podczas dodawania waluty. Spróbuj ponownie później."
+                });
             }
 
-            return RedirectToAction("Index");
+            return Json(new { success = true });
         }
 
         public ActionResult EditCurrencyForm(int id)
@@ -53,7 +66,7 @@ namespace Frontend.Controllers
             {
                 currency = _client.GetCurrency(id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return RedirectToAction("Index");
             }
@@ -67,38 +80,89 @@ namespace Frontend.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditCurrency(CurrencyUpdate currency)
+        public JsonResult EditCurrency(CurrencyUpdate currency)
         {
             if (!ModelState.IsValid)
-                return PartialView("EditCurrencyForm", currency);
+            {
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("EditCurrencyForm", currency),
+                    message = "Wystąpił błąd walidacji danych. Proszę poprawić formularz."
+                });
+            }
 
             try
             {
                 _client.UpdateCurrency(currency);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return PartialView("EditCurrencyForm", currency);
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("EditCurrencyForm", currency),
+                    message = "Wystąpił błąd podczas aktualizacji waluty. Spróbuj ponownie później."
+                });
             }
-            return RedirectToAction("Index");
+
+            return Json(new { success = true });
         }
 
-        public ActionResult DeleteCurrency(int id)
+        public ActionResult DeleteCurrencyForm(int id)
+        {
+            CurrencyRead currency;
+            try
+            {
+                currency = _client.GetCurrency(id);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index");
+            }
+            return PartialView("DeleteCurrencyForm", currency);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteCurrency(CurrencyRead currency)
         {
             try
             {
-                _client.DeleteCurrency(id);
+                _client.DeleteCurrency(currency.Id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                RedirectToAction("Index");
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("DeleteCurrencyForm", currency),
+                    message = "Wystąpił błąd podczas usuwania waluty. Spróbuj ponownie później."
+                });
             }
-            return RedirectToAction("Index");
+
+            return Json(new { success = true });
         }
 
         ~CurrenciesController()
         {
             _client.Close();
+        }
+
+        private string RenderPartialViewToString(string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = ControllerContext.RouteData.GetRequiredString("action");
+
+            ViewData.Model = model;
+
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
         }
     }
 }

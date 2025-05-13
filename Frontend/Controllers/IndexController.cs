@@ -8,5 +8,10 @@ namespace Frontend.Controllers
         {
             return View();
         }
+
+        public ActionResult ConnectionLost()
+        {
+            return View();
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Frontend.VehicleService;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -11,6 +12,7 @@ namespace Frontend.Controllers
     {
         private readonly VehicleServiceClient _client = new VehicleServiceClient();
         private readonly CurrencyServiceClient _currency_client = new CurrencyServiceClient();
+        private string[] CurrenciesArray => _currency_client.GetCurrencies().Select(c => c.Name).ToArray();
 
         public ActionResult Index()
         {
@@ -19,9 +21,9 @@ namespace Frontend.Controllers
             {
                 vehicles = _client.GetVehicles();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return Content("Connection to backend lost.");
+                return RedirectToAction("ConnectionLost", "Index");
             }
             return View(vehicles);
         }
@@ -30,27 +32,41 @@ namespace Frontend.Controllers
         {
             var vehicle = new VehicleCreate
             {
-                Currencies = _currency_client.GetCurrencies().Select(c => c.Name).ToArray()
+                Currencies = CurrenciesArray
             };
             return PartialView("AddVehicleForm", vehicle);
         }
 
         [HttpPost]
-        public ActionResult AddVehicle(VehicleCreate vehicle)
+        public JsonResult AddVehicle(VehicleCreate vehicle)
         {
             if (!ModelState.IsValid)
-                return PartialView("AddVehicle", vehicle);
+            {
+                vehicle.Currencies = CurrenciesArray;
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("AddVehicleForm", vehicle),
+                    message = "Wystąpił błąd walidacji danych. Proszę poprawić formularz."
+                });
+            }
 
             try
             {
                 _client.AddVehicle(vehicle);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return PartialView("AddVehicle", vehicle);
+                vehicle.Currencies = CurrenciesArray;
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("AddVehicleForm", vehicle),
+                    message = "Wystąpił błąd podczas dodawania pojazdu. Spróbuj ponownie później."
+                });
             }
 
-            return RedirectToAction("Index");
+            return Json(new { success = true });
         }
 
         public ActionResult EditVehicleForm(int id)
@@ -60,7 +76,7 @@ namespace Frontend.Controllers
             {
                 vehicle = _client.GetVehicle(id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return RedirectToAction("Index");
             }
@@ -72,44 +88,97 @@ namespace Frontend.Controllers
                 Model = vehicle.Model,
                 Price = vehicle.Price,
                 Currency = vehicle.Currency,
-                Currencies = _currency_client.GetCurrencies().Select(c => c.Name).ToArray()
+                Currencies = CurrenciesArray
             };
             return PartialView("EditVehicleForm", updateVehicle);
         }
 
         [HttpPost]
-        public ActionResult EditVehicle(VehicleUpdate vehicle)
+        public JsonResult EditVehicle(VehicleUpdate vehicle)
         {
             if (!ModelState.IsValid)
-                return PartialView("EditVehicleForm", vehicle);
+            {
+                vehicle.Currencies = CurrenciesArray;
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("EditVehicleForm", vehicle),
+                    message = "Wystąpił błąd walidacji danych. Proszę poprawić formularz."
+                });
+            }
 
             try
             {
                 _client.UpdateVehicle(vehicle);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return PartialView("EditVehicleForm", vehicle);
+                vehicle.Currencies = CurrenciesArray;
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("EditVehicleForm", vehicle),
+                    message = "Wystąpił błąd podczas aktualizacji pojazdu. Spróbuj ponownie później."
+                });
             }
-            return RedirectToAction("Index");
+
+            return Json(new { success = true });
         }
 
-        public ActionResult DeleteVehicle(int id)
+        public ActionResult DeleteVehicleForm(int id)
+        {
+            VehicleRead vehicle;
+            try
+            {
+                vehicle = _client.GetVehicle(id);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index");
+            }
+            return PartialView("DeleteVehicleForm", vehicle);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteVehicle(VehicleRead vehicle)
         {
             try
             {
-                _client.DeleteVehicle(id);
+                _client.DeleteVehicle(vehicle.Id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                RedirectToAction("Index");
+                return Json(new
+                {
+                    success = false,
+                    html = RenderPartialViewToString("DeleteVehicleForm", vehicle),
+                    message = "Wystąpił błąd podczas usuwania pojazdu. Spróbuj ponownie później."
+                });
             }
-            return RedirectToAction("Index");
+
+            return Json(new { success = true });
         }
 
         ~VehiclesController()
         {
             _client.Close();
+        }
+
+        private string RenderPartialViewToString(string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = ControllerContext.RouteData.GetRequiredString("action");
+
+            ViewData.Model = model;
+
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
         }
     }
 }

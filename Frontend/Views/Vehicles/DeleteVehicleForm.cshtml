@@ -1,0 +1,32 @@
+﻿@model Frontend.VehicleService.VehicleRead
+
+<form action="Vehicles/DeleteVehicle" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title">Usuń pojazd</h5>
+    </div>
+    <div class="modal-body">
+        <div class="mb-3">
+            <label class="form-label">Id</label>
+            <input name="Id" value="@Model.Id" class="form-control" readonly />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Marka</label>
+            <input name="Brand" value="@Model.Brand" class="form-control" readonly />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Model</label>
+            <input name="Model" value="@Model.Model" class="form-control" readonly />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Cena</label>
+            <input name="Price" value="@Model.Price" class="form-control" inputmode="decimal" readonly />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Waluta</label>
+            <input name="Currency" value="@Model.Currency" class="form-control" readonly />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger">Usuń</button>
+    </div>
+</form>

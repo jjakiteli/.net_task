@@ -26,7 +26,7 @@
                 <td>@v.Price.ToString("F2")@v.Currency</td>
                 <td>
                     <button class="btn btn-sm btn-primary edit-btn" data-id="@v.Id" data-bs-toggle="modal" data-bs-target="#editModal">Edytuj</button>
-                    <a href="@Url.Action("DeleteVehicle", "Vehicles", new {id = v.Id})" class="btn btn-sm btn-danger" onclick="return confirm('Czy jesteś pewny, że chcesz usunąć pojazd o ID=@v.Id?');">Usuń</a>
+                    <button class="btn btn-sm btn-danger delete-btn" data-id="@v.Id" data-bs-toggle="modal" data-bs-target="#deleteModal">Usuń</button>
                 </td>
             </tr>
         }
@@ -41,6 +41,12 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -48,12 +54,20 @@
     </div>
 </div>
 
+
 @section Scripts {
     <script>
         $(document).on('click', '.edit-btn', function () {
             var id = $(this).data('id');
             $.get('/Vehicles/EditVehicleForm/' + id, function (html) {
                 $('#editModal .modal-content').html(html);
+            });
+        });
+
+        $(document).on('click', '.delete-btn', function () {
+            var id = $(this).data('id');
+            $.get('/Vehicles/DeleteVehicleForm/' + id, function (html) {
+                $('#deleteModal .modal-content').html(html);
             });
         });
 
@@ -71,13 +85,24 @@
                 method: form.attr('method'),
                 data: form.serialize(),
                 success: function (response) {
-                    if ($(response).find("form").length > 0) {
-                        form.closest('.modal-content').html(response);
+                    if (!response.success) {
+                        form.closest('.modal-content').html(response.html);
+                        if (response.message) {
+                            showErrorMessage(response.message);
+                        }
                     } else {
                         location.reload();
                     }
                 }
             });
         });
+        function showErrorMessage(message) {
+            var alertHtml = `
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                ${message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>`;
+            $('.modal-body').prepend(alertHtml);
+        }
     </script>
 }
