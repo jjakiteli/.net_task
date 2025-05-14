@@ -7,9 +7,9 @@ namespace Frontend.Controllers
 {
     public class CurrenciesController : Controller
     {
-        private readonly CurrencyServiceClient _client;
+        private readonly ICurrencyService _client;
 
-        public CurrenciesController(CurrencyServiceClient currencyClient)
+        public CurrenciesController(ICurrencyService currencyClient)
         {
             _client = currencyClient;
         }
@@ -146,15 +146,6 @@ namespace Frontend.Controllers
             }
 
             return Json(new { success = true });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _client?.Close();
-            }
-            base.Dispose(disposing);
         }
 
         private string RenderPartialViewToString(string viewName, object model)

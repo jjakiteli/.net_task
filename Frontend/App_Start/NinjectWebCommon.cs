@@ -62,8 +62,8 @@ namespace Frontend.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<VehicleServiceClient>().ToSelf().InRequestScope();
-            kernel.Bind<CurrencyServiceClient>().ToSelf().InRequestScope();
+            kernel.Bind<IVehicleService>().To<VehicleServiceClient>().InRequestScope();
+            kernel.Bind<ICurrencyService>().To<CurrencyServiceClient>().InRequestScope();
         }
     }
 }

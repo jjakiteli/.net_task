@@ -9,10 +9,10 @@ namespace Frontend.Controllers
 {
     public class VehiclesController : Controller
     {
-        private readonly VehicleServiceClient _client;
-        private readonly CurrencyServiceClient _currencyClient;
+        private readonly IVehicleService _client;
+        private readonly ICurrencyService _currencyClient;
 
-        public VehiclesController(VehicleServiceClient client, CurrencyServiceClient currencyClient)
+        public VehiclesController(IVehicleService client, ICurrencyService currencyClient)
         {
             _client = client;
             _currencyClient = currencyClient;
@@ -163,15 +163,6 @@ namespace Frontend.Controllers
             }
 
             return Json(new { success = true });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _client?.Close();
-            }
-            base.Dispose(disposing);
         }
 
         private string RenderPartialViewToString(string viewName, object model)
