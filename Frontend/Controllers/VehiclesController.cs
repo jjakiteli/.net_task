@@ -1,7 +1,6 @@
 ﻿using Frontend.CurrencyService;
 using Frontend.VehicleService;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -10,9 +9,16 @@ namespace Frontend.Controllers
 {
     public class VehiclesController : Controller
     {
-        private readonly VehicleServiceClient _client = new VehicleServiceClient();
-        private readonly CurrencyServiceClient _currency_client = new CurrencyServiceClient();
-        private string[] CurrenciesArray => _currency_client.GetCurrencies().Select(c => c.Name).ToArray();
+        private readonly VehicleServiceClient _client;
+        private readonly CurrencyServiceClient _currencyClient;
+
+        public VehiclesController(VehicleServiceClient client, CurrencyServiceClient currencyClient)
+        {
+            _client = client;
+            _currencyClient = currencyClient;
+        }
+
+        private string[] CurrenciesArray => _currencyClient.GetCurrencies().Select(c => c.Name).ToArray();
 
         public ActionResult Index()
         {
@@ -159,9 +165,13 @@ namespace Frontend.Controllers
             return Json(new { success = true });
         }
 
-        ~VehiclesController()
+        protected override void Dispose(bool disposing)
         {
-            _client.Close();
+            if (disposing)
+            {
+                _client?.Close();
+            }
+            base.Dispose(disposing);
         }
 
         private string RenderPartialViewToString(string viewName, object model)

@@ -7,7 +7,12 @@ namespace Frontend.Controllers
 {
     public class CurrenciesController : Controller
     {
-        private readonly CurrencyServiceClient _client = new CurrencyServiceClient();
+        private readonly CurrencyServiceClient _client;
+
+        public CurrenciesController(CurrencyServiceClient currencyClient)
+        {
+            _client = currencyClient;
+        }
 
         public ActionResult Index()
         {
@@ -37,7 +42,7 @@ namespace Frontend.Controllers
                 return Json(new
                 {
                     success = false,
-                    html = RenderPartialViewToString("AddCurrency", currency),
+                    html = RenderPartialViewToString("AddCurrencyForm", currency),
                     message = "Wystąpił błąd walidacji danych. Proszę poprawić formularz."
                 });
             }
@@ -51,7 +56,7 @@ namespace Frontend.Controllers
                 return Json(new
                 {
                     success = false,
-                    html = RenderPartialViewToString("AddCurrency", currency),
+                    html = RenderPartialViewToString("AddCurrencyForm", currency),
                     message = "Wystąpił błąd podczas dodawania waluty. Spróbuj ponownie później."
                 });
             }
@@ -143,9 +148,13 @@ namespace Frontend.Controllers
             return Json(new { success = true });
         }
 
-        ~CurrenciesController()
+        protected override void Dispose(bool disposing)
         {
-            _client.Close();
+            if (disposing)
+            {
+                _client?.Close();
+            }
+            base.Dispose(disposing);
         }
 
         private string RenderPartialViewToString(string viewName, object model)
