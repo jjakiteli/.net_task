@@ -36,10 +36,8 @@ namespace Frontend.Controllers
 
         public ActionResult AddVehicleForm()
         {
-            var vehicle = new VehicleCreate
-            {
-                Currencies = CurrenciesArray
-            };
+            var vehicle = new VehicleCreate();
+            ViewBag.Currencies = CurrenciesArray;
             return PartialView("AddVehicleForm", vehicle);
         }
 
@@ -48,7 +46,7 @@ namespace Frontend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                vehicle.Currencies = CurrenciesArray;
+                ViewBag.Currencies = CurrenciesArray;
                 return Json(new
                 {
                     success = false,
@@ -63,7 +61,7 @@ namespace Frontend.Controllers
             }
             catch (Exception)
             {
-                vehicle.Currencies = CurrenciesArray;
+                ViewBag.Currencies = CurrenciesArray;
                 return Json(new
                 {
                     success = false,
@@ -93,9 +91,9 @@ namespace Frontend.Controllers
                 Brand = vehicle.Brand,
                 Model = vehicle.Model,
                 Price = vehicle.Price,
-                Currency = vehicle.Currency,
-                Currencies = CurrenciesArray
+                Currency = vehicle.Currency
             };
+            ViewBag.Currencies = CurrenciesArray;
             return PartialView("EditVehicleForm", updateVehicle);
         }
 
@@ -104,7 +102,7 @@ namespace Frontend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                vehicle.Currencies = CurrenciesArray;
+                ViewBag.Currencies = CurrenciesArray;
                 return Json(new
                 {
                     success = false,
@@ -119,7 +117,7 @@ namespace Frontend.Controllers
             }
             catch (Exception)
             {
-                vehicle.Currencies = CurrenciesArray;
+                ViewBag.Currencies = CurrenciesArray;
                 return Json(new
                 {
                     success = false,

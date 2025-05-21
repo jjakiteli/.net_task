@@ -239,9 +239,6 @@
     <None Include="Connected Services\VehicleService\VehicleService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\VehicleService\VehicleService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Views\Index\ConnectionLost.cshtml" />
     <Content Include="Views\Currencies\DeleteCurrencyForm.cshtml" />
     <Content Include="Views\Vehicles\DeleteVehicleForm.cshtml" />

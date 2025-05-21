@@ -21,7 +21,7 @@
         <div class="mb-3">
             <label class="form-label">Waluta</label>
             <select name="Currency" class="form-control" required>
-                @foreach (var currency in Model.Currencies)
+                @foreach (var currency in ViewBag.Currencies)
                 {
                     <option value="@currency" @(currency == Model.Currency ? "selected" : "")>
                         @currency

@@ -25,8 +25,5 @@ namespace Models
         [DataMember]
         [Required(ErrorMessage = "Currency is required.")]
         public string Currency { get; set; }
-
-        [DataMember]
-        public List<string> Currencies { get; set; }
     }
 }

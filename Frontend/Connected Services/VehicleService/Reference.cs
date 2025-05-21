@@ -135,9 +135,6 @@ namespace Frontend.VehicleService {
         private string BrandField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string[] CurrenciesField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CurrencyField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -165,19 +162,6 @@ namespace Frontend.VehicleService {
                 if ((object.ReferenceEquals(this.BrandField, value) != true)) {
                     this.BrandField = value;
                     this.RaisePropertyChanged("Brand");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string[] Currencies {
-            get {
-                return this.CurrenciesField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CurrenciesField, value) != true)) {
-                    this.CurrenciesField = value;
-                    this.RaisePropertyChanged("Currencies");
                 }
             }
         }
@@ -244,9 +228,6 @@ namespace Frontend.VehicleService {
         private string BrandField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string[] CurrenciesField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CurrencyField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -277,19 +258,6 @@ namespace Frontend.VehicleService {
                 if ((object.ReferenceEquals(this.BrandField, value) != true)) {
                     this.BrandField = value;
                     this.RaisePropertyChanged("Brand");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string[] Currencies {
-            get {
-                return this.CurrenciesField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.CurrenciesField, value) != true)) {
-                    this.CurrenciesField = value;
-                    this.RaisePropertyChanged("Currencies");
                 }
             }
         }
